@@ -33,14 +33,16 @@ public class MainActivity extends AppCompatActivity implements HfCoordinatorLayo
                 if( state == State.EXPANDED ) {
 
                     //展开状态
+                    demoTv.setVisibility(View.GONE);
 
                 }else if(state == State.COLLAPSED){
 
                     //折叠状态
+                    demoTv.setVisibility(View.VISIBLE);
 
                 }else {
-
                     //中间状态
+                    demoTv.setVisibility(View.GONE);
 
                 }
             }
@@ -77,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements HfCoordinatorLayo
     }
 
     private void setFloatVisible() {
-        if(DEFAULT_Y == getNestScrollViewY())
-        {
-            //move to update
-            demoTv.setVisibility(View.VISIBLE);
-        }else if(getNestScrollViewY()>DEFAULT_Y)
-        {
-            demoTv.setVisibility(View.GONE);
-        }
+//        if(DEFAULT_Y == getNestScrollViewY())
+//        {
+//            //move to update
+//            demoTv.setVisibility(View.VISIBLE);
+//        }else if(getNestScrollViewY()>DEFAULT_Y)
+//        {
+//            demoTv.setVisibility(View.GONE);
+//        }
     }
 
     private void drawFoatView(int scrollY) {

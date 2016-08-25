@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity implements HfCoordinatorLayo
     public TextView demoTv;
     public float textSizeFlag = 0;
     public HfCoordinatorLayout layout =null;
-    public int currentScrollY = 0;
-    public int currentSOldScrollY = 0;
     public NestedScrollView nestedScrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,35 +31,45 @@ public class MainActivity extends AppCompatActivity implements HfCoordinatorLayo
         //设置工具栏标题
         final CollapsingToolbarLayout collapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("");
-        collapsingToolbarLayout.setExpandedTitleColor(Color.YELLOW);
-        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        collapsingToolbarLayout.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                TraceLog.i();
-                return false;
-            }
-        });
-        collapsingToolbarLayout.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View v, MotionEvent event) {
-                TraceLog.i();
-                return false;
-            }
-        });
         demoTv = (TextView) findViewById(R.id.tv_lock_fab);
+        demoTv.setVisibility(View.GONE);
+        TraceLog.i("GONE");
         nestedScrollView = (NestedScrollView) findViewById(R.id.nestscroll_view);
         nestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 TraceLog.i("scrollX:%d scrollY:%d oldScrollX:%d oldScrollY:%d",scrollX,scrollY,oldScrollX,oldScrollY);
-                currentScrollY = scrollY;
-                currentSOldScrollY = oldScrollY;
+                drawFoatView(scrollY);
             }
         });
 
         layout = (HfCoordinatorLayout) findViewById(R.id.hf_coordinator);
         layout.setOnNestActionListener(this);
+    }
+
+    private void setFloatVisible() {
+        if(DEFAULT_Y == getNestScrollViewY())
+        {
+            //move to update
+            demoTv.setVisibility(View.VISIBLE);
+        }else if(getNestScrollViewY()>DEFAULT_Y)
+        {
+            demoTv.setVisibility(View.GONE);
+        }
+    }
+
+    private void drawFoatView(int scrollY) {
+        if(scrollY>=(MAX_HEIGHT-DEFAULT_HEIGHT))
+        {
+            layoutTextView(DEFAULT_HEIGHT);
+        }
+        else if(scrollY>0)
+        {
+            layoutTextView(MAX_HEIGHT-scrollY);
+        }else
+        {
+            layoutTextView(MAX_HEIGHT);
+        }
     }
 
     private void layoutTextView(float height) {
@@ -75,91 +83,28 @@ public class MainActivity extends AppCompatActivity implements HfCoordinatorLayo
 
     @Override
     public void onNestedScroll(int dyConsumed, int dyUnconsumed) {
-        if(currentScrollY == 0 && currentSOldScrollY == 0)
-        {
-            demoTv.setVisibility(View.GONE);
-        }
-
-        if(currentScrollY>currentSOldScrollY)
-        {
-            //up
-            drawUpView(dyConsumed,dyUnconsumed);
-        }else if(currentSOldScrollY>currentScrollY)
-        {
-            //down
-            drawDownView(dyConsumed,dyUnconsumed);
-        }
-    }
-
-    private void drawDownView(int dyConsumed, int dyUnconsumed) {
-        if(currentScrollY <= 0)
-        {
-            //invisible
-            demoTv.setVisibility(View.GONE);
-            TraceLog.i("gone");
-        }
-
-        if(currentScrollY>=100)
-        {
-            layoutTextView(DEFAULT_HEIGHT);
-        }
-        else if(currentScrollY>0)
-        {
-            layoutTextView(MAX_HEIGHT-currentScrollY);
-        }else
-        {
-            layoutTextView(MAX_HEIGHT);
-        }
-    }
-
-    private void drawUpView(int dyConsumed, int dyUnconsumed) {
-
-        if(currentScrollY>0)
-        {
-            if(DEFAULT_Y == getNestScrollViewY())
-            {
-                //first show
-                demoTv.setVisibility(View.VISIBLE);
-                TraceLog.i("visible");
-            }
-        }else if(currentScrollY<=0)
-        {
-            demoTv.setVisibility(View.GONE);
-            TraceLog.i("gone");
-        }
-
-        if(currentScrollY>=100)
-        {
-            layoutTextView(DEFAULT_HEIGHT);
-        }
-        else if(currentScrollY>=0)
-        {
-            layoutTextView(MAX_HEIGHT-currentScrollY);
-        }else if(currentScrollY<0)
-        {
-            layoutTextView(MAX_HEIGHT);
-        }
+        setFloatVisible();
     }
 
     @Override
     public void onStopScroll() {
-        currentScrollY = 0;
-        currentSOldScrollY = 0;
-        getNestScrollViewY();
     }
 
     private int getNestScrollViewY() {
         int[] a = new int[2];
         nestedScrollView.getLocationOnScreen(a);
+        TraceLog.i("Y:"+a[1]);
         return a[1];
     }
 
     @Override
     public void onStartScroll() {
 
-        if(currentScrollY <= 0 )
+        if(DEFAULT_Y < getNestScrollViewY())
         {
+            //first show
             demoTv.setVisibility(View.GONE);
+            TraceLog.i("GONE");
         }
     }
 }

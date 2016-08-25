@@ -81,4 +81,10 @@ public class CollapsingCenterLayout extends CollapsingToolbarLayout {
             }
         }
     }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        TraceLog.i("w:"+w+"\t h:"+h+" oldw:"+oldw+"\t oldh:"+oldh);
+    }
 }

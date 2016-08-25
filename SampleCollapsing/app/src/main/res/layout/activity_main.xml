@@ -1,8 +1,9 @@
-<android.support.design.widget.CoordinatorLayout
+<com.joyfulmath.samplecollapsing.HfCoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/hf_coordinator"
     app:statusBarBackground="@null">
 
     <android.support.design.widget.AppBarLayout
@@ -21,6 +22,7 @@
             app:collapsedTitleGravity="center"
             app:expandedTitleGravity="center_horizontal|bottom"
             app:expandedTitleMarginBottom="10dp"
+            app:title=""
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <LinearLayout
@@ -43,16 +45,26 @@
                     app:layout_collapseMode="parallax"/>
             </LinearLayout>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways"/>
-        </com.joyfulmath.samplecollapsing.CollapsingCenterLayout>
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="80dp"-->
+                <!--android:background="#66006600"-->
+                <!--app:layout_collapseMode="pin">-->
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_toolbar_hide"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:gravity="center"-->
+                    <!--android:background="#33112211"-->
+                    <!--android:text="NEWAABBCC"-->
+                    <!--android:visibility="gone"-->
+                    <!--app:layout_collapseMode="pin"/>-->
+            <!--</android.support.v7.widget.Toolbar>-->
+        </com.joyfulmath.samplecollapsing.CollapsingCenterLayout>>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <com.joyfulmath.samplecollapsing.HFNestScrollView
         android:id="@+id/nestscroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -67,7 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:gravity="center"
-                android:background="#33112211"
+                android:background="#339911"
+                android:textSize="@dimen/text_size"
                 android:text="AABBCC"
                 app:layout_scrollFlags="enterAlways"/>
             <TextView
@@ -115,5 +128,19 @@
                 android:gravity="center"
                 android:text="128"/>
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-</android.support.design.widget.CoordinatorLayout>
+    </com.joyfulmath.samplecollapsing.HFNestScrollView>
+    <TextView
+        android:id="@+id/tv_lock_fab"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="26dp"
+        android:elevation="1dp"
+        android:gravity="center"
+        android:textSize="@dimen/text_size"
+        android:translationZ="5dp"
+        android:background="#339911"
+        android:text="AABBCC"
+        android:visibility="gone"/>
+</com.joyfulmath.samplecollapsing.HfCoordinatorLayout>

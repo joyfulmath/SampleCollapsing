@@ -21,15 +21,19 @@ public class NestScrollManager {
     public float textSizeFlag = 0;
     private NestedScrollView nestedScrollView;
     private AppBarLayout appBar;
-    private TextView toolBarText;
+    private View toolBarText;
     private Context context;
     private Window parent;
-    public NestScrollManager(Context context, Window parent, int appBarId, int nestedScrollViewId, int toolBarId) {
+    onTextSizeChangeListener changeListener;
+    public NestScrollManager(Context context, Window parent, int appBarId,
+                             int nestedScrollViewId, int toolBarId,
+                             onTextSizeChangeListener changeListener) {
         this.context = context;
         this.parent = parent;
         appBar = (AppBarLayout) parent.findViewById(appBarId);
         nestedScrollView = (NestedScrollView) parent.findViewById(nestedScrollViewId);
-        toolBarText = (TextView) parent.findViewById(toolBarId);
+        toolBarText = parent.findViewById(toolBarId);
+        this.changeListener = changeListener;
     }
 
     public void initManager(float maxHeight,float minHeight,int textSizeId)
@@ -92,7 +96,10 @@ public class NestScrollManager {
 
     private void layoutTextView(float height) {
         float textRadio = height/MAX_HEIGHT;
-        toolBarText.setTextSize(TypedValue.COMPLEX_UNIT_PX,textSizeFlag*textRadio);
+        if(changeListener!=null)
+        {
+            changeListener.onTextSizeChanged(textSizeFlag*textRadio,textRadio);
+        }
         ViewGroup.LayoutParams params =toolBarText.getLayoutParams();
         params.height = (int) height;
         toolBarText.setLayoutParams(params);
@@ -118,6 +125,10 @@ public class NestScrollManager {
             parent.setAttributes(attr);
             parent.clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+    }
+
+    public interface onTextSizeChangeListener{
+        void onTextSizeChanged(float textSize,float radio);
     }
 
 }
